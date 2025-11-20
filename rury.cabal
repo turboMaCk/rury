@@ -32,5 +32,6 @@ executable rury
                     , cryptohash-sha256
                     , base16-bytestring
                     , utf8-string
+                    , directory
     hs-source-dirs:   app
     default-language: Haskell2010

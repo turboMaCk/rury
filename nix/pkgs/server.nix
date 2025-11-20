@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, base16-bytestring, bytestring
-, cryptohash-sha256, http-types, lib, process, scotty, text
-, utf8-string, wai
+, cryptohash-sha256, directory, http-types, lib, process, scotty
+, text, utf8-string, wai
 }:
 mkDerivation {
   pname = "rury";
@@ -9,7 +9,7 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson base base16-bytestring bytestring cryptohash-sha256
+    aeson base base16-bytestring bytestring cryptohash-sha256 directory
     http-types process scotty text utf8-string wai
   ];
   license = lib.licenses.bsd3;
