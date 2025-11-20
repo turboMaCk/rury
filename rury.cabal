@@ -33,5 +33,6 @@ executable rury
                     , base16-bytestring
                     , utf8-string
                     , directory
-    hs-source-dirs:   app
+                    , wai-cors
+    hs-source-dirs:   server
     default-language: Haskell2010

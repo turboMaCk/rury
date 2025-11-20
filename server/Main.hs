@@ -13,12 +13,21 @@ import qualified Data.Text as Text
 import qualified Data.Text.Encoding as TextEncoding
 import qualified Data.Text.Lazy as LText
 import qualified Network.HTTP.Types as Http
-import System.Directory.OsPath as OsPath
+import Network.Wai.Middleware.Cors (CorsResourcePolicy (..))
+import qualified Network.Wai.Middleware.Cors as Cors
 import System.Directory.Internal as Directory
+import System.Directory.OsPath as OsPath
 import System.Exit (ExitCode (..))
 import qualified System.Process as Process
 import Web.Scotty (ActionM)
 import qualified Web.Scotty as Scotty
+
+corsPolicy :: CorsResourcePolicy
+corsPolicy =
+    Cors.simpleCorsResourcePolicy
+        { corsMethods = [Http.methodGet, Http.methodPost]
+        , corsOrigins = Nothing
+        }
 
 -- Define the expected JSON input structure
 newtype RPackageList = RPackageList {unRPackageList :: [Text]}
@@ -83,8 +92,10 @@ getImageHandler = do
 
 main :: IO ()
 main = Scotty.scotty 3000 $ do
+    Scotty.middleware $ Cors.cors (const $ Just corsPolicy)
+
     Scotty.get "/" $ do
-        Scotty.setHeader "content-type" "application/html"
+        Scotty.setHeader "Content-Type" "text/html"
         Scotty.file "index.html"
 
     Scotty.get "/all-packages" $ do
@@ -95,6 +106,6 @@ main = Scotty.scotty 3000 $ do
         Scotty.setHeader "Content-Type" "text/json"
         Scotty.file "packages/var/r-packages-preinstalled.json"
 
-    -- The main route
+
     Scotty.post "/get-image" $ do
         getImageHandler
